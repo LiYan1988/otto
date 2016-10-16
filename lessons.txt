@@ -1,0 +1,5 @@
+1. Very important to find good hyperparameters.
+2. Six tricks: https://medium.com/@chris_bour/6-tricks-i-learned-from-the-otto-kaggle-challenge-a9299378cd61#.gv8pra4xn
+3. Try deep learning
+4. Hyperparameter tune: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/14334/hyperparameter-optimization-using-hyperopt/79583
+5. xgboost: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/12947/achieve-0-50776-on-the-leaderboard-in-a-minute-with-xgboost?page=9
