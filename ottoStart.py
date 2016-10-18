@@ -10,8 +10,11 @@ Created on Sun Oct 16 16:38:27 2016
 """
 
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
 import xgboost as xgb
-from sklearn import (preprocessing)
+from sklearn import (preprocessing, manifold, decomposition)
 
 def load_data():
     x_train = pd.read_csv('train.csv')
