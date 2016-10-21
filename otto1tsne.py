@@ -3,6 +3,8 @@
 Created on Tue Oct 18 09:43:02 2016
 
 @author: lyaa
+
+The TSNE in sklearn is buggy, it cannot handle many samples, use R!
 """
 
 from ottoStart import *
