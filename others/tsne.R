@@ -1,10 +1,10 @@
 library(Rtsne)
-setwd("your/path/to/train")
-train <- read.csv("train.csv", stringsAsFactors=FALSE)[, -1]
+setwd("C:\\Users\\lyaa\\Documents\\otto\\others")
+train <- read.csv("..\\train.csv", stringsAsFactors=FALSE)[, -1]
 
 set.seed(1234)
 tsne_out_train <- Rtsne(as.matrix(train[,1:93]), check_duplicates = FALSE, pca = TRUE, 
-                        max_iter = 1000, perplexity=30, theta=0.5, dims=2, verbose=TRUE)
+                        max_iter = 1000, perplexity=30, theta=0.5, dims=4, verbose=TRUE)
 
 my_palette = c("red", "blue", "green", "brown", "magenta", "orange", "cyan", "black", "yellow")
 palette(my_palette)
@@ -15,3 +15,4 @@ legend("bottomleft", c("1","2", "3", "4", "5", "6", "7", "8", "9"),
        lty=c(1,1), lwd=c(5,5), col=my_palette, bty="n", cex = 0.7) 
 
 palette("default")
+write.csv(x = tsne_out_train$Y, file = '..\\tsne4.csv', quote = FALSE, row.names = FALSE)

@@ -12,6 +12,7 @@ Created on Sun Oct 16 16:38:27 2016
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from tsne.tsne import TSNE
 
 import xgboost as xgb
 from sklearn import (preprocessing, manifold, decomposition)
