@@ -16,4 +16,4 @@ x = log(x+1)
 x_tsne = Rtsne(x, check_duplicates = T, pca = TRUE, 
                perplexity=30, theta=0.5, dims=3, verbose = TRUE)
 
-write.csv(x_tsne$Y, file='../tsne3all.csv', quote=FALSE, row.names=FALSE)
+write.csv(x_tsne$Y, file='tsne3all.csv', quote=FALSE, row.names=FALSE)
