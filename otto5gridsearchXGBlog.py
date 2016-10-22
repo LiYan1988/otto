@@ -16,7 +16,7 @@ if __name__=='__main__':
         
     n_cv = 3
     xgbclf = xgb.XGBClassifier(objective='multi:softprob', silent=False, 
-        seed=0, nthread=-1, gamma=1, subsample=0.8, learning_rate=0.1)
+        seed=0, nthread=-1, gamma=1, subsample=0.8, learning_rate=0.3)
     params = {}
 #    params['learning_rate'] = [0.01, 0.02, 0.05, 0.1]
     params['n_estimators'] = [20, 30, 40, 50, 60, 100, 140, 180, 200]
@@ -31,4 +31,4 @@ if __name__=='__main__':
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
     rndcv.fit(x_train_tfidf, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
-    search_results.to_csv('xgboost_randomSearchCV.csv')
+    search_results.to_csv('xgboost_randomSearchCV_eta03.csv')
