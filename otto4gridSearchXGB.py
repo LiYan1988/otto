@@ -27,7 +27,7 @@ if __name__=='__main__':
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
     
-    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=120,
+    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=70,
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
     rndcv.fit(x_train_tfidf, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
