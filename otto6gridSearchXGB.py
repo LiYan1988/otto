@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Sat Oct 22 21:46:21 2016
+
+@author: lyaa
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Sat Oct 22 12:58:56 2016
 
 @author: lyaa
@@ -16,19 +23,19 @@ if __name__=='__main__':
         
     n_cv = 3
     xgbclf = xgb.XGBClassifier(objective='multi:softprob', silent=False, 
-        seed=0, nthread=-1, gamma=1, subsample=0.8, learning_rate=0.01)
+        seed=0, nthread=-1, gamma=1, subsample=0.8, learning_rate=0.1)
     params = {}
 #    params['learning_rate'] = [0.01, 0.02, 0.05, 0.1]
-    params['n_estimators'] = [1600, 2000, 2400, 3000, 3400]
+    params['n_estimators'] = [160, 200, 240, 300, 400]
     params['max_depth'] = [9, 12, 15, 18, 21]
-    params['colsample_bytree'] = [0.8, 0.9]
-    params['min_child_weight'] = [5, 10, 12]
-    params['gamma'] = [2, 4]
+    params['colsample_bytree'] = [0.8, 0.9, 1]
+    params['min_child_weight'] = [1, 5, 10, 12]
+    params['gamma'] = [1, 2, 4]
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
     
-    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=30,
+    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=70,
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
     rndcv.fit(x_train_tfidf, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
-    search_results.to_csv('xgboost_randomSearchCV_eta001.csv')
+    search_results.to_csv('xgboost_randomSearchCV.csv')
