@@ -11,9 +11,12 @@ Created on Sun Oct 16 16:38:27 2016
 
 import pandas as pd
 import numpy as np
+from scipy import sparse, io
 import matplotlib.pyplot as plt
 import xgboost as xgb
-from sklearn import (preprocessing, manifold, decomposition)
+from sklearn import (preprocessing, manifold, decomposition, 
+                     feature_extraction, model_selection, cross_validation)
+
 
 def load_data():
     x_train = pd.read_csv('train.csv')
@@ -35,6 +38,27 @@ def save_submission(y_pred_proba, file_name):
     df.index.name = 'id'
     df.to_csv(file_name, index=True)
 
+def add_features(x_train, x_test):
+    """Add new features 
+    """
+    x = pd.concat([x_train, x_test])
+    
+    scaler = preprocessing.StandardScaler(with_mean=False)
+    tfidf = feature_extraction.text.TfidfTransformer()
+    x_tfidf = tfidf.fit_transform(x)
+    x_tfidf = scaler.fit_transform(x_tfidf)
+    x_train_tfidf = x_tfidf[:x_train.shape[0], :].todense()
+    x_test_tfidf = x_tfidf[x_train.shape[0]:, :].todense()
+    
+    scaler = preprocessing.StandardScaler()
+    x_log = np.log10(x+1)
+    x_log = scaler.fit_transform(x_log)
+    x_train_log = x_log[:x_train.shape[0], :]
+    x_test_log = x_log[x_train.shape[0]:, :]
+
+    return x_train_tfidf, x_test_tfidf, x_train_log, x_test_log
+    
+
     
 if __name__=='__main__':
     x_train, y_train, x_test = load_data()
@@ -46,7 +70,7 @@ if __name__=='__main__':
     param['eta'] = 0.1
     param['max_depth'] = 12
     param['sub_sample'] = 0.9
-    param['min_child_weight '] = 10
+    param['min_child_weight'] = 10
     param['num_class'] = 9
     param['nthread'] = 7
     param['silent'] = False
