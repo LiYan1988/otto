@@ -42,17 +42,19 @@ def add_features(x_train, x_test):
     """Add new features 
     """
     x = pd.concat([x_train, x_test])
-    
+    tsne = pd.read_csv('tsne3all.csv')
     scaler = preprocessing.StandardScaler(with_mean=False)
     tfidf = feature_extraction.text.TfidfTransformer()
     x_tfidf = tfidf.fit_transform(x)
-    x_tfidf = scaler.fit_transform(x_tfidf)
-    x_train_tfidf = x_tfidf[:x_train.shape[0], :].todense()
-    x_test_tfidf = x_tfidf[x_train.shape[0]:, :].todense()
+    x_tfidf = scaler.fit_transform(x_tfidf).todense()
+    x_tfidf = np.hstack((x_tfidf, tsne))
+    x_train_tfidf = x_tfidf[:x_train.shape[0], :]
+    x_test_tfidf = x_tfidf[x_train.shape[0]:, :]
     
     scaler = preprocessing.StandardScaler()
     x_log = np.log10(x+1)
     x_log = scaler.fit_transform(x_log)
+    x_log = np.hstack((x_log, tsne))
     x_train_log = x_log[:x_train.shape[0], :]
     x_test_log = x_log[x_train.shape[0]:, :]
 
