@@ -14,8 +14,9 @@ import numpy as np
 from scipy import sparse, io
 import matplotlib.pyplot as plt
 import xgboost as xgb
-from sklearn import (preprocessing, manifold, decomposition, 
-                     feature_extraction, model_selection, cross_validation)
+from sklearn import (preprocessing, manifold, decomposition, ensemble,
+                     feature_extraction, model_selection, cross_validation,
+                     calibration)
 
 
 def load_data():
