@@ -21,7 +21,7 @@ if __name__=='__main__':
     params['max_depth'] = [19, 21, 23, 25] # this is better larger
 #    params['min_samples_split'] = [1, 2, 16] # better smaller
 #    params['min_samples_leaf'] = [1, 5, 10] # this is better 1
-    params['max_features'] = [0.5, 0.9, 0.95, 1] # better smaller
+    params['max_features'] = [0.85, 0.9, 0.95, 1] # better smaller
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
     
