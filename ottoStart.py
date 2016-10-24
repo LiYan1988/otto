@@ -13,6 +13,8 @@ import pandas as pd
 import numpy as np
 from scipy import sparse, io
 import matplotlib.pyplot as plt
+import cPickle as pickle
+
 import xgboost as xgb
 from sklearn import (preprocessing, manifold, decomposition, ensemble,
                      feature_extraction, model_selection, cross_validation,
@@ -61,7 +63,17 @@ def add_features(x_train, x_test):
 
     return x_train_tfidf, x_test_tfidf, x_train_log, x_test_log
     
-
+def save_data(data, file_name):
+    """File name must ends with .pkl
+    """
+    with open(file_name, 'wb') as f:
+        pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+        
+def read_data(file_name):
+    with open(file_name, 'rb') as f:
+        data = pickle.load(f)
+        
+    return data
     
 if __name__=='__main__':
     x_train, y_train, x_test = load_data()
