@@ -18,7 +18,7 @@ if __name__=='__main__':
     params = {}
     params['n_estimators'] = [550, 600, 650, 700] 
 #    params['criterion'] = ['gini', 'entropy']
-    params['max_depth'] = [19, 21, 23, 25] # this is better larger
+    params['max_depth'] = [21, 25, 27, 30, 33] # this is better larger
 #    params['min_samples_split'] = [1, 2, 16] # better smaller
 #    params['min_samples_leaf'] = [1, 5, 10] # this is better 1
     params['max_features'] = [0.85, 0.9, 0.95, 1.0] # better smaller
