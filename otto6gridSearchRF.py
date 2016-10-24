@@ -14,15 +14,16 @@ if __name__=='__main__':
     x_train_tfidf, x_test_tfidf, x_train_log, x_test_log = \
         add_features(x_train, x_test)
         
+    # max_depth=21, max_features=0.6, n_estimators=600
     n_cv = 3
     rf = ensemble.RandomForestClassifier(class_weight='balanced', n_jobs=7)
     params = {}
-    params['n_estimators'] = [200, 400, 600, 800]
+    params['n_estimators'] = [550, 600, 750, 800]
 #    params['criterion'] = ['gini', 'entropy']
-    params['max_depth'] = [12, 15, 18, 21] # larger better
+    params['max_depth'] = [21, 25, 27, 30, 33] # larger better
 #    params['min_samples_split'] = [2, 8, 16, 32] # smaller better
 #    params['min_samples_leaf'] = [1, 5, 10] # smaller better
-    params['max_features'] = [0.6, 0.7, 0.8, 0.9] # smaller better
+    params['max_features'] = [0.5, 0.6, 0.7, 0.8] # smaller better
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
     
@@ -30,4 +31,4 @@ if __name__=='__main__':
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
     rndcv.fit(x_train_tfidf, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
-    search_results.to_csv('rf_randomSearchCV2.csv')
+    search_results.to_csv('rf_randomSearchCV3.csv')
