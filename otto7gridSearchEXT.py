@@ -14,6 +14,8 @@ if __name__=='__main__':
         
     # n_estimators=600, max_depth=21, max_features=0.9
     # max_depth=33, max_features=0.85, n_estimators=600: 0.49146
+    # max_depth=39, max_features=0.85, n_estimators=700: 0.48785
+    # max_depth=42, max_features=0.7, n_estimators=700: 0.48868
     n_cv = 3
     ext = ensemble.ExtraTreesClassifier(class_weight='balanced', n_jobs=7)
     params = {}
