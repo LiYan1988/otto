@@ -16,6 +16,10 @@ if __name__=='__main__':
         
     # max_depth=21, max_features=0.6, n_estimators=600
     # max_depth=33, max_features=0.5, n_estimators=800: 0.50777
+    # max_depth=39, max_features=0.5, n_estimators=950: 0.50339 ## the best ##
+    # max_depth=42, max_features=0.4, n_estimators=900: 0.50364
+    # max_depth=33, max_features=0.4, n_estimators=900: 0.50375
+    # max_depth=39, max_features=0.3, n_estimators=800: 0.50437
     n_cv = 3
     rf = ensemble.RandomForestClassifier(class_weight='balanced', n_jobs=7)
     params = {}
