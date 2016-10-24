@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import xgboost as xgb
 from sklearn import (preprocessing, manifold, decomposition, ensemble,
                      feature_extraction, model_selection, cross_validation,
-                     calibration)
+                     calibration, linear_model)
 
 
 def load_data():
