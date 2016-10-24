@@ -18,8 +18,10 @@ if __name__=='__main__':
     calibrated_ext = calibration.CalibratedClassifierCV(ext, method='isotonic',
         cv=7)
     calibrated_ext.fit(x_train_tfidf, y_train)
+    y_hat_ext_tfidf = calibrated_ext.predict_proba(x_train_tfidf)
     y_pred_ext_tfidf = calibrated_ext.predict_proba(x_test_tfidf)
-    save_submission(y_pred_ext_tfidf, 'layer1_ext_tfidf.csv')
+    y_ext_tfidf = np.vstack((y_hat_ext_tfidf, y_pred_ext_tfidf))
+    save_data(y_ext_tfidf, 'layer1_ext_tfidf.pkl')
     
     # RF
     rf = ensemble.RandomForestClassifier(class_weight='balanced', n_jobs=7, 
@@ -27,6 +29,8 @@ if __name__=='__main__':
     calibrated_rf = calibration.CalibratedClassifierCV(rf, method='isotonic',
         cv=7)
     calibrated_rf.fit(x_train_tfidf, y_train)
+    y_hat_rf_tfidf = calibrated_rf.predict_proba(x_train_tfidf)
     y_pred_rf_tfidf = calibrated_rf.predict_proba(x_test_tfidf)
-    save_submission(y_pred_rf_tfidf, 'layer1_rf_tfidf.csv')
+    y_rf_tfidf = np.vstack((y_hat_rf_tfidf, y_pred_rf_tfidf))
+    save_data(y_rf_tfidf, 'layer1_rf_tfidf.pkl')
     
