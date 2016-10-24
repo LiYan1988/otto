@@ -13,7 +13,7 @@ if __name__=='__main__':
         add_features(x_train, x_test)
         
     # n_estimators=600, max_depth=21, max_features=0.9
-    # max_depth=33, max_features=0.85, n_estimators=600
+    # max_depth=33, max_features=0.85, n_estimators=600: 0.49146
     n_cv = 3
     ext = ensemble.ExtraTreesClassifier(class_weight='balanced', n_jobs=7)
     params = {}
