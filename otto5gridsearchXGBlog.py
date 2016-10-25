@@ -29,6 +29,6 @@ if __name__=='__main__':
     
     rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=30,
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
-    rndcv.fit(x_train_tfidf, y_train)
+    rndcv.fit(x_train_log, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
     search_results.to_csv('xgboost_randomSearchCV_eta001_log.csv')
