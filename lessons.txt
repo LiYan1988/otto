@@ -3,3 +3,5 @@
 3. Try deep learning
 4. Hyperparameter tune: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/14334/hyperparameter-optimization-using-hyperopt/79583
 5. xgboost: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/12947/achieve-0-50776-on-the-leaderboard-in-a-minute-with-xgboost?page=9
+6. Variance stabilizing transform, Anscombe transform
+7. The LogisticRegressionCV in sklearn is problematic, it gives wrong CV scores. Or I don't know how to use it.
