@@ -46,7 +46,7 @@ if __name__=='__main__':
     #LR
     print 'Calculating LR...'
     lr = linear_model.LogisticRegression(C=0.06, class_weight='balanced', 
-        max_iter=100, n_jobs=8, multi_class='multinomial', random_state=0, 
+        max_iter=1000, n_jobs=8, multi_class='multinomial', random_state=0, 
         verbose=10, solver='sag')
     lr.fit(x_train_log, y_train)
     y_hat_lr_log = lr.predict_proba(x_train_log)
