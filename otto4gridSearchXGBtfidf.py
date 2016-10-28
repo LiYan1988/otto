@@ -7,6 +7,10 @@ Created on Sat Oct 22 12:58:56 2016
 Transform data and save results
 n_estimators=2400, max_depth=18, colsample_bytree=0.8/0.9, min_child_weight=5, 
 gamma=2: cv=0.45717
+n_estimators=2400, max_depth=15, colsample_bytree=0.8, min_child_weight=5, 
+gamma=1: cv=0.45419
+n_estimators=3000, max_depth=21, colsample_bytree=0.6, min_child_weight=7, 
+gamma=1: cv=0.45477
 """
 
 from ottoStart import *
