@@ -49,17 +49,17 @@ def add_features(x_train, x_test):
     scaler = preprocessing.StandardScaler(with_mean=False)
     tfidf = feature_extraction.text.TfidfTransformer()
     x_tfidf = tfidf.fit_transform(x)
-    x_tfidf = scaler.fit_transform(x_tfidf).todense()
+    x_tfidf = scaler.fit_transform(x_tfidf).toarray()
     x_tfidf = np.hstack((x_tfidf, tsne))
-    x_train_tfidf = x_tfidf[:x_train.shape[0], :]
-    x_test_tfidf = x_tfidf[x_train.shape[0]:, :]
+    x_train_tfidf = sparse.csr_matrix(x_tfidf[:x_train.shape[0], :])
+    x_test_tfidf = sparse.csr_matrix(x_tfidf[x_train.shape[0]:, :])
     
-    scaler = preprocessing.StandardScaler()
+    scaler = preprocessing.StandardScaler(with_mean=False)
     x_log = np.log10(x+1)
     x_log = scaler.fit_transform(x_log)
     x_log = np.hstack((x_log, tsne))
-    x_train_log = x_log[:x_train.shape[0], :]
-    x_test_log = x_log[x_train.shape[0]:, :]
+    x_train_log = sparse.csr_matrix(x_log[:x_train.shape[0], :])
+    x_test_log = sparse.csr_matrix(x_log[x_train.shape[0]:, :])
 
     return x_train_tfidf, x_test_tfidf, x_train_log, x_test_log
     
