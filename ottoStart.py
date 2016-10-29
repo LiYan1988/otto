@@ -189,10 +189,10 @@ if __name__=='__main__':
     estimators = []
     for nn in n_neighbors:
         estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
-            n_jobs=-1))
+            n_jobs=-1, weights='distance', metric='braycurtis'))
     megaknn = MegaClassifier(estimators, cv=5)
 #    megaknn.fit_predict_proba(x1.values, y1.values, x2.values, 
 #        random_state=0)
     megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
         random_state=0)
-    megaknn.save_results('megaknn')
+    megaknn.save_results('megaknn_braycurtis')
