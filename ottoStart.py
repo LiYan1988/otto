@@ -189,11 +189,13 @@ if __name__=='__main__':
 #    n_neighbors = [2, 4]
     estimators = []
     for nn in n_neighbors:
+#        estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
+#            n_jobs=-1, weights='distance', metric='braycurtis'))
         estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
-            n_jobs=-1, weights='distance', metric='braycurtis'))
+            n_jobs=-1, weights='distance', metric='euclidean'))
     megaknn = MegaClassifier(estimators, cv=5)
 #    megaknn.fit_predict_proba(x1.values, y1.values, x2.values, 
 #        random_state=0)
     megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
         random_state=0)
-    megaknn.save_results('megaknn_braycurtis')
+    megaknn.save_results('megaknn_euclidean')
