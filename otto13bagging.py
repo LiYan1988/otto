@@ -19,11 +19,11 @@ rf = ensemble.RandomForestClassifier(class_weight='balanced', n_jobs=8,
     n_estimators=300, max_depth=40, max_features=0.6, verbose=0)
 
 lr = linear_model.LogisticRegression(C=0.06, class_weight='balanced', 
-    max_iter=10000, n_jobs=8, multi_class='multinomial', random_state=0, 
-    verbose=100, solver='sag')
+    max_iter=1000, n_jobs=8, multi_class='multinomial', random_state=0, 
+    verbose=100, solver='sag', tol=0.001)
 
 #n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-estimators = [ext, rf]
+estimators = [ext, rf, lr]
 #for nn in n_neighbors:
 #        estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
 #            n_jobs=-1, weights='distance', metric='braycurtis'))
@@ -37,15 +37,14 @@ xgbclf = xgb.XGBClassifier(objective='multi:softprob', silent=False,
 estimators_layer1 = estimators
 estimators_layer2 = [xgbclf]
 megabag = MegaBagging(x_train_tfidf.toarray(), y_train.values, 
-    x_train_tfidf.toarray(), estimators_layer1, estimators_layer2, cv=5, 
-    repetitions_layer2=10)
+    x_test_tfidf.toarray(), estimators_layer1, estimators_layer2, cv=5, 
+    repetitions_layer2=20)
 megabag.cv_repeat(0)
 
 if not os.path.exists('megabag1'):
     os.mkdir('megabag1')
     
 save_data(megabag.y_test_pred, 'megabag1/megabag1_final.pkl')
-save_data((megabag.train_new_x, megabag.train_new_y), 
-    'megabag1/megabag1_train.pkl') 
+save_data(megabag.train_new_x, 'megabag1/megabag1_train.pkl') 
 save_data(megabag.test_new_x, 'megabag1/megabag1_test.pkl')
 
