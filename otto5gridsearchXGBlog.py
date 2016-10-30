@@ -7,6 +7,10 @@ Created on Sat Oct 22 12:58:56 2016
 Transform data and save results
 n_estimators=2400, min_child_weight=5, max_depth=18, gamma=2, colsample_bytree=
 0.8/0.9, cv=0.452547/0.453195
+n_estimators=2400, min_child_weight=4, max_depth=18, gamma=1, colsample_bytree=
+0.6, cv=0.448789
+n_estimators=2400, min_child_weight=5, max_depth=18, gamma=1, colsample_bytree=
+0.6, cv=0.448859
 """
 
 from ottoStart import *
@@ -29,7 +33,7 @@ if __name__=='__main__':
     params['n_estimators'] = [2400]
     params['max_depth'] = [18]
     params['colsample_bytree'] = [0.6, 0.7, 0.8]
-    parmas['min_child_weight'] = [1, 2, 3, 4, 5]
+    params['min_child_weight'] = [1, 2, 3, 4, 5]
     params['gamma'] = [1, 2]
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
