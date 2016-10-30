@@ -32,14 +32,14 @@ if __name__=='__main__':
 #    params['gamma'] = [2, 4]
     params['n_estimators'] = [2400]
     params['max_depth'] = [18]
-    params['colsample_bytree'] = [0.6, 0.7, 0.8]
-    params['min_child_weight'] = [1, 2, 3, 4, 5]
+    params['colsample_bytree'] = [0.5, 0.6]
+    params['min_child_weight'] = [3, 4, 5]
     params['gamma'] = [1, 2]
     kf = cross_validation.StratifiedKFold(y_train, n_folds=n_cv, shuffle=True, 
         random_state=0)
     
-    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=30,
+    rndcv = model_selection.RandomizedSearchCV(xgbclf, params, n_iter=12,
         scoring='neg_log_loss', cv=kf, verbose=10, random_state=0)
     rndcv.fit(x_train_log, y_train)
     search_results = pd.DataFrame(rndcv.cv_results_)
-    search_results.to_csv('xgboost_randomSearchCV_eta001_log2.csv')
+    search_results.to_csv('xgboost_randomSearchCV_eta001_log3.csv')
