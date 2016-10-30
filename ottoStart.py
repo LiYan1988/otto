@@ -131,6 +131,7 @@ class MegaClassifier(BaseEstimator, ClassifierMixin):
                 valid_pred.append(estimator.predict_proba(X_valid))
                 print 'Predict model {} on test data'.format(j)
                 test_pred.append(estimator.predict_proba(X_test))
+                del estimator
             self.y_train_pred_cv.append(valid_pred)
             self.y_test_pred_cv.append(test_pred)
             
