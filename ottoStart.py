@@ -191,6 +191,9 @@ class MegaBagging(BaseEstimator, ClassifierMixin):
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
+        self.train_new_x = []
+        self.test_new_x = []
+        self.n_classes = len(np.unique(y_train))
     
     def bagging(self, large_index, small_index):
         # A small amount of data are used to generate features for layer 2 
@@ -207,14 +210,12 @@ class MegaBagging(BaseEstimator, ClassifierMixin):
             estimator.fit(small_x, small_y)
             train_new.append(estimator.predict_proba(large_x))
             test_new.append(estimator.predict_proba(self.x_test))
-#            print train_new[-1].shape
-#            print test_new[-1].shape
             del estimator
             est += 1
         tmp = (i for i in train_new)
         train_new = np.hstack(tmp)
         tmp = (i for i in test_new)
-        test_new= np.hstack(tmp)
+        test_new = np.hstack(tmp)
         
         return train_new, test_new, large_y
         
@@ -224,27 +225,31 @@ class MegaBagging(BaseEstimator, ClassifierMixin):
         y_test_pred = []
         self.train_new_x = []
         self.test_new_x = []
-        self.train_new_y = []
+        train_new_x_temp = np.zeros((self.x_train.shape[0], 
+            self.x_train.shape[1]+len(self.estimators_layer1)*self.n_classes))
+        test_new_x_temp = np.zeros((self.x_test.shape[0],
+            self.x_test.shape[1]+len(self.estimators_layer1)*self.n_classes))
         cv_round = 0
         for large_index, small_index in kf.split(self.x_train, self.y_train):
             print 'CV round {}, layer 1'.format(cv_round)
             x_train_new, x_test_new, y_train_new = \
                 self.bagging(large_index, small_index)
-            self.train_new_x.append(x_train_new)
-            self.test_new_x.append(x_test_new)
-            self.train_new_y.append(y_train_new)
+            train_new_x_temp[large_index] += x_train_new
+            test_new_x_temp += x_test_new
             for estimator in self.estimators_layer2:
                 estimator.fit(x_train_new, y_train_new)
                 y_test_pred.append(estimator.predict_proba(x_test_new))
                 del estimator
             cv_round += 1
-            
+        
+        self.train_new_x.append(train_new_x_temp/float(self.cv-1))
+        self.test_new_x.append(test_new_x_temp/float(self.cv))
         n_est = len(y_test_pred)
         y_test_pred_ave = y_test_pred[0]
         for k in range(1, n_est):
             y_test_pred_ave += y_test_pred[k]
         y_test_pred_ave /= float(n_est)
-            
+        
         return y_test_pred_ave
         
     def cv_repeat(self, random_state):
