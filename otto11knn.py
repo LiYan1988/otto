@@ -23,23 +23,23 @@ x1, x2, y1, y2 = model_selection.train_test_split(x_train, y_train,
 #megaknn.save_results('megaknn_braycurtis')
 
 # euclidean
-n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-estimators = []
-for nn in n_neighbors:
-    estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
-        n_jobs=-1, weights='distance', metric='euclidean'))
-megaknn = MegaClassifier(estimators, cv=5)
-megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
-    random_state=0)
-megaknn.save_results('layer1/megaknn_euclidean')
-
-# manhattan
 #n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 #estimators = []
 #for nn in n_neighbors:
 #    estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
-#        n_jobs=-1, weights='distance', metric='manhattan'))
+#        n_jobs=-1, weights='distance', metric='euclidean'))
 #megaknn = MegaClassifier(estimators, cv=5)
 #megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
 #    random_state=0)
-#megaknn.save_results('layer1/megaknn_manhattan')
+#megaknn.save_results('layer1/megaknn_euclidean')
+
+# manhattan
+n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+estimators = []
+for nn in n_neighbors:
+    estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
+        n_jobs=-1, weights='distance', metric='manhattan'))
+megaknn = MegaClassifier(estimators, cv=5)
+megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
+    random_state=0)
+megaknn.save_results('layer1/megaknn_manhattan')
