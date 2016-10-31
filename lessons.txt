@@ -1,5 +1,13 @@
 1. Very important to find good hyperparameters.
+  --It takes very long time to grid search good hyperparameters
 2. Six tricks: https://medium.com/@chris_bour/6-tricks-i-learned-from-the-otto-kaggle-challenge-a9299378cd61#.gv8pra4xn
+  --XGB, as always
+  --Hyperparameter optimization
+  --Stacking, this is very important
+  --Stacking, the 1st winner's solution is complicated and I didn't figure out
+      how to implement it. But the megabagging idea is easy to do
+  --Calibration works, but the scikit-learn implementation takes too much memory
+  --Nueral network, will try
 3. Try deep learning
 4. Hyperparameter tune: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/14334/hyperparameter-optimization-using-hyperopt/79583
 5. xgboost: https://www.kaggle.com/c/otto-group-product-classification-challenge/forums/t/12947/achieve-0-50776-on-the-leaderboard-in-a-minute-with-xgboost?page=9

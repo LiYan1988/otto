@@ -71,13 +71,13 @@ pred = predict(bst,testX)
 pred = matrix(pred,9,length(pred)/9)
 pred = t(pred)
 rm(bst)
+write.csv(pred,file='otto_xgboostFirstRound.csv', quote=FALSE,row.names=FALSE)
 
 tmpC = 1:480
-tmpL = length(trind)
-gtree = 200
+tmpL = floor(length(trind)*0.9) # what if tmpL = 0.9 of total samples?
 for (z in tmpC) {
   print(z)
-  tmpS1 = sample(trind,size=tmpL,replace=T)
+  tmpS1 = sample(trind,size=tmpL,replace=T) # what if replace is FALSE?
   tmpS2 = setdiff(trind,tmpS1)
   
   tmpX2 = trainX[tmpS2,]
@@ -105,4 +105,4 @@ pred = pred/(z+1)
 
 pred = data.frame(1:nrow(pred),pred)
 names(pred) = c('id', paste0('Class_',1:9))
-write.csv(pred,file='../ottoHomeBagG5.csv', quote=FALSE,row.names=FALSE)
+write.csv(pred,file='../ottoHomeBagG5_09totalSamples.csv', quote=FALSE,row.names=FALSE)
