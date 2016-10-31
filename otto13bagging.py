@@ -3,6 +3,9 @@
 Created on Sun Oct 30 12:20:38 2016
 
 @author: lyaa
+layer 1: [ext, rf, lr], layer 2: xgboost, cv=5, repetition=20, 
+LB private:0.42343
+
 """
 
 from ottoStart import *
@@ -20,15 +23,15 @@ rf = ensemble.RandomForestClassifier(class_weight='balanced', n_jobs=8,
 
 lr = linear_model.LogisticRegression(C=0.06, class_weight='balanced', 
     max_iter=1000, n_jobs=8, multi_class='multinomial', random_state=0, 
-    verbose=100, solver='sag', tol=0.001)
+    verbose=0, solver='sag', tol=0.001)
 
-#n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 estimators = [ext, rf, lr]
-#for nn in n_neighbors:
+for nn in n_neighbors:
 #        estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
 #            n_jobs=-1, weights='distance', metric='braycurtis'))
-#    estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
-#        n_jobs=-1, weights='distance', metric='euclidean'))
+    estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
+        n_jobs=-1, weights='distance', metric='euclidean'))
 
 xgbclf = xgb.XGBClassifier(objective='multi:softprob', silent=False, 
     seed=0, nthread=-1, n_estimators=240, max_depth=15, colsample_bytree=0.8,
