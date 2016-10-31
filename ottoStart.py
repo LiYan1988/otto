@@ -14,6 +14,7 @@ import numpy as np
 from scipy import sparse, io, optimize
 import matplotlib.pyplot as plt
 import cPickle as pickle
+import os
 
 import xgboost as xgb
 from sklearn import (preprocessing, manifold, decomposition, ensemble,
@@ -131,6 +132,7 @@ class MegaClassifier(BaseEstimator, ClassifierMixin):
                 valid_pred.append(estimator.predict_proba(X_valid))
                 print 'Predict model {} on test data'.format(j)
                 test_pred.append(estimator.predict_proba(X_test))
+                del estimator
             self.y_train_pred_cv.append(valid_pred)
             self.y_test_pred_cv.append(test_pred)
             
@@ -178,11 +180,100 @@ class MegaClassifier(BaseEstimator, ClassifierMixin):
             save_data(self.y_test_pred_all[i],
                  head+'_test_pred_model_'+str(i)+'.pkl')
         save_submission(self.y_test_pred_weighted, head+'_test_weighted.csv')
+        
+class MegaBagging(BaseEstimator, ClassifierMixin):
+    def __init__(self, x_train, y_train, x_test, estimators_layer1, 
+        estimators_layer2, cv=3, repetitions_layer2=10):
+        self.estimators_layer1 = estimators_layer1
+        self.estimators_layer2 = estimators_layer2
+        self.cv = cv
+        self.repetitions_layer2 = repetitions_layer2
+        self.x_train = x_train
+        self.y_train = y_train
+        self.x_test = x_test
+        self.train_new_x = []
+        self.test_new_x = []
+        self.n_classes = len(np.unique(y_train))
+    
+    def bagging(self, large_index, small_index):
+        # A small amount of data are used to generate features for layer 2 
+        # bagging
+        large_x = self.x_train[large_index]
+        large_y = self.y_train[large_index]
+        small_x = self.x_train[small_index]
+        small_y = self.y_train[small_index]
+        train_new = [large_x]
+        test_new = [self.x_test]
+        est = 0
+        for estimator in self.estimators_layer1:
+            print 'Layer 1, estimator {}'.format(est)
+            estimator.fit(small_x, small_y)
+            train_new.append(estimator.predict_proba(large_x))
+            test_new.append(estimator.predict_proba(self.x_test))
+            del estimator
+            est += 1
+        tmp = (i for i in train_new)
+        train_new = np.hstack(tmp)
+        tmp = (i for i in test_new)
+        test_new = np.hstack(tmp)
+        
+        return train_new, test_new, large_y
+        
+    def cv_run(self, random_state):
+        kf = model_selection.StratifiedKFold(n_splits=self.cv, shuffle=True,
+            random_state=random_state)
+        y_test_pred = []
+        self.train_new_x = []
+        self.test_new_x = []
+        train_new_x_temp = np.zeros((self.x_train.shape[0], 
+            self.x_train.shape[1]+len(self.estimators_layer1)*self.n_classes))
+        test_new_x_temp = np.zeros((self.x_test.shape[0],
+            self.x_test.shape[1]+len(self.estimators_layer1)*self.n_classes))
+        cv_round = 0
+        for large_index, small_index in kf.split(self.x_train, self.y_train):
+            print 'CV round {}, layer 1'.format(cv_round)
+            x_train_new, x_test_new, y_train_new = \
+                self.bagging(large_index, small_index)
+            train_new_x_temp[large_index] += x_train_new
+            test_new_x_temp += x_test_new
+            for estimator in self.estimators_layer2:
+                estimator.fit(x_train_new, y_train_new)
+                y_test_pred.append(estimator.predict_proba(x_test_new))
+                del estimator
+            cv_round += 1
+        
+        self.train_new_x.append(train_new_x_temp/float(self.cv-1))
+        self.test_new_x.append(test_new_x_temp/float(self.cv))
+        n_est = len(y_test_pred)
+        y_test_pred_ave = y_test_pred[0]
+        for k in range(1, n_est):
+            y_test_pred_ave += y_test_pred[k]
+        y_test_pred_ave /= float(n_est)
+        
+        return y_test_pred_ave
+        
+    def cv_repeat(self, random_state):
+        np.random.seed(random_state)
+        y_test_pred = []
+        for i in range(self.repetitions_layer2):
+            print 'Repetition {}'.format(i)
+            seed = np.random.randint(1, 100000)
+            tmp = self.cv_run(seed)
+            if len(y_test_pred) == 0:
+                y_test_pred = tmp
+            else:
+                y_test_pred += tmp
+        y_test_pred /= float(self.repetitions_layer2)
+        
+        self.y_test_pred = y_test_pred
     
 if __name__=='__main__':
     x_train, y_train, x_test = load_data()
     x1, x2, y1, y2 = model_selection.train_test_split(x_train, y_train, 
-        test_size=0.8, random_state=0)
+        test_size=0.9, random_state=0)
+    x1, x2, y1, y2 = model_selection.train_test_split(x1, y1, 
+        test_size=0.9, random_state=0)
+    
     
     n_neighbors = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 #    n_neighbors = [2, 4]
@@ -192,9 +283,11 @@ if __name__=='__main__':
 #            n_jobs=-1, weights='distance', metric='braycurtis'))
         estimators.append(neighbors.KNeighborsClassifier(n_neighbors=nn,
             n_jobs=-1, weights='distance', metric='euclidean'))
-    megaknn = MegaClassifier(estimators, cv=5)
+    megaknn = MegaBagging(x1.values, y1.values, x2.values, estimators, estimators, cv=2, 
+                          repetitions_layer2=2)
+    megaknn.cv_repeat(0)
 #    megaknn.fit_predict_proba(x1.values, y1.values, x2.values, 
 #        random_state=0)
-    megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
-        random_state=0)
-    megaknn.save_results('megaknn_euclidean')
+#    megaknn.fit_predict_proba(x_train.values, y_train.values, x_test.values, 
+#        random_state=0)
+#    megaknn.save_results('megaknn_euclidean')
