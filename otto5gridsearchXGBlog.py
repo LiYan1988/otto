@@ -11,6 +11,8 @@ n_estimators=2400, min_child_weight=4, max_depth=18, gamma=1, colsample_bytree=
 0.6, cv=0.448789
 n_estimators=2400, min_child_weight=5, max_depth=18, gamma=1, colsample_bytree=
 0.6, cv=0.448859
+n_estimators=2400, min_child_weight=3/4/5, max_depth=18, gamma=1, 
+colsample_bytree=0.5, cv=0.447986
 """
 
 from ottoStart import *
