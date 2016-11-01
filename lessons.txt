@@ -17,4 +17,7 @@
   --A whole bunch of data transformation (statistical) methods
 7. The LogisticRegressionCV in sklearn is problematic, it gives wrong CV scores. Or I don't know how to use it.
   --LogisticRegressCV and cross_cv_val are not working properly
+8. The meta bagging:
+  --Sample with replacement seems work better than without replacement
+  --Sample ratio (or the number of samples) is important, seems 0.9 of total samples is better than 1.0
 
